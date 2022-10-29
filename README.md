@@ -2,7 +2,7 @@
 
 shark-dgen is a Qt GUI program that allows you to create Lua dissectors in wireshark with no experience in Lua.
 
-![alt text](https://github.com/paramedicjack/shark-dgen/blob/main/photos/v0.2/filled.PNG?raw=true)
+![alt text](https://github.com/paramedicjack/shark-dgen/blob/main/photos/v0.3/empty.PNG?raw=true)
 
 ![alt text](https://github.com/paramedicjack/shark-dgen/blob/main/photos/v0.2/output.PNG?raw=true)
 
@@ -56,6 +56,23 @@ You can delete ports by selecting them in the dropdown and pressing the DELETE b
 3. Verify that the dissector looks how it should in the Dissector tab
 4. Press Save As... to export the dissector. Place it in the wireshark Lua plugins directory.
 
+### Export table as CSV
+
+1. Create table using the field prompts
+2. Click the export table button
+3. Save as .csv file
+
+The tables can now be edited in excel or a CSV editor and imported later.
+
+### Import as CSV
+
+Note: table must be in the same format it was exported in. I recommend exporting a table to use as a template
+
+1. Click the import button
+2. Open the .csv file
+
+The table will be filled. The column headers will be overwritten with numbers - this is a known bug.
+
 ## Features
 
 | Feature  | Status | Version |
@@ -67,9 +84,8 @@ You can delete ports by selecting them in the dropdown and pressing the DELETE b
 | save dissector to file | implemented | v0.1 |
 | multiple port binding | implemented | v0.2 |
 | enum values | implemented | v0.2 |
-| TCP, etc | not implemented | - |
+| import and export from csv | implemented | v0.3 |
 | more types | not implemented | - |
-| import and export from csv | not implemented | - |
 | text appending | not implemented | - |
 | nested subtrees | not implemented | - |
 

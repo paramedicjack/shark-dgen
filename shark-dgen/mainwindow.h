@@ -37,6 +37,16 @@ private slots:
 
     void on_portDeleteButton_clicked();
 
+    void on_subtreeAdd_clicked();
+
+    void on_nestedInsertButton_clicked();
+
+    void on_nestedComboBox_currentIndexChanged(int index);
+
+    void on_exportCSV_clicked();
+
+    void on_importCSV_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -76,12 +86,16 @@ private:
 
     };
 
+    std::map<QString, QStringList> subtreeMap {
+
+    };
+
     enum COLUMN_NAMES {
         ITEM = 0,
         TYPE = 1,
         ENDIANNESS = 2,
         BASE = 3,
-        TEXTAPPEND = 4,
+        TEXT_APPEND = 4,
         LENGTH = 5,
         INDEX = 6,
 
@@ -89,7 +103,7 @@ private:
 
     QStringList portList;
 
-    void errorCondition(QString error);
+    void logCondition(QString error);
 
     QString enumFunctionHeader = "local function get%1(value)\r\n";
     QString checkEnumValue = "   if value == %1 then return \" %2 \" end\r\n";
@@ -114,6 +128,8 @@ private:
     QString emptyNameErr = "ERROR: please enter a name";
     QString acronymLengthErr = "ERROR: please enter an acronym between 2-3 letters";
     QString portErr = "ERROR: please enter a valid port between 1 and 65535";
+
+    QString csvHeader = "Item,Type,Endianness,Base,Text Append\r\n";
 
 };
 #endif // MAINWINDOW_H

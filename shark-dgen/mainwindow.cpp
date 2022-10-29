@@ -34,6 +34,7 @@ void MainWindow::on_addButton_clicked()
                 ui->fieldTable->setItem(row, COLUMN_NAMES::ENDIANNESS, new QTableWidgetItem(tr("BE")));
             }
             ui->fieldTable->setItem(row, COLUMN_NAMES::BASE, new QTableWidgetItem(ui->baseBox->currentText()));
+            ui->fieldTable->setItem(row, COLUMN_NAMES::TEXT_APPEND, new QTableWidgetItem("")); //TODO
             auto it = typeSizeMap.find(ui->typeBox->currentText());
             ui->fieldTable->setItem(row, COLUMN_NAMES::LENGTH, new QTableWidgetItem(QString::number((it->second)/8)));
             if(row == 0) {
@@ -59,7 +60,7 @@ void MainWindow::on_deleteButton_clicked()
     }
 }
 
-void MainWindow::errorCondition(QString error) {
+void MainWindow::logCondition(QString error) {
     ui->logEdit->clear();
     ui->logEdit->setText(error);
 }
@@ -93,16 +94,16 @@ void MainWindow::on_generateButton_clicked()
 {
     ui->dissectorEdit->clear();
     if(ui->nameEdit->toPlainText().isEmpty()) {
-        errorCondition(emptyNameErr);
+        logCondition(emptyNameErr);
         return;
     }
     if((ui->acronymEdit->toPlainText().size() < 2) || (ui->acronymEdit->toPlainText().size() > 3)) {
-        errorCondition(acronymLengthErr);
+        logCondition(acronymLengthErr);
         return;
     }
     int portNumber = ui->portEdit->toPlainText().toInt();
     if((portNumber < 1) || (portNumber > 65535)) {
-        errorCondition(portErr);
+        logCondition(portErr);
         return;
     }
 
@@ -181,6 +182,7 @@ void MainWindow::on_generateButton_clicked()
         }
 
         if(!ui->saveAsButton->isEnabled()) ui->saveAsButton->setEnabled(true);
+        ui->logEdit->setText("Generated Dissector");
     }
 }
 
@@ -314,5 +316,120 @@ void MainWindow::on_portDeleteButton_clicked()
             ui->portDeleteButton->setEnabled(false);
         }
     }
+}
+
+void MainWindow::on_subtreeAdd_clicked()
+{
+    if(!ui->subtreeEdit->document()->isEmpty()) {
+        auto it = subtreeMap.find(ui->subtreeEdit->toPlainText());
+        if (it == subtreeMap.end()) {
+            QStringList newQSL;
+            subtreeMap.try_emplace(ui->subtreeEdit->toPlainText(), newQSL);
+        }
+        ui->nestedComboBox->clear();
+        for (auto const& stree : subtreeMap) {
+            ui->nestedComboBox->addItem(stree.first);
+        }
+        if(ui->nestedComboBox->count() > 0) {
+            if(ui->nestedComboBox->isEnabled() == false) ui->nestedComboBox->setEnabled(true);
+            if(ui->subtreeDelete->isEnabled() == false) ui->subtreeDelete->setEnabled(true);
+            if(ui->nestedInsertButton->isEnabled() == false) ui->nestedInsertButton->setEnabled(true);
+        }
+    }
+}
+
+
+void MainWindow::on_nestedInsertButton_clicked()
+{
+    QItemSelectionModel *select = ui->fieldTable->selectionModel();
+
+    if(select->hasSelection() && !ui->nestedComboBox->currentText().isEmpty()) {
+        int row = ui->fieldTable->currentRow();
+        if (!subtreeMap[ui->nestedComboBox->currentText()].contains(ui->fieldTable->item(row, COLUMN_NAMES::ITEM)->text())) {
+            subtreeMap[ui->nestedComboBox->currentText()] << ui->fieldTable->item(row, COLUMN_NAMES::ITEM)->text();
+        }
+        ui->nestedValueComboBox->clear();
+        if(subtreeMap[ui->nestedComboBox->currentText()].count() > 0) {
+            ui->nestedValueComboBox->addItems(subtreeMap[ui->nestedComboBox->currentText()]);
+        }
+        if((ui->nestedValueComboBox->count() > 0) && (!ui->nestedValueComboBox->isEnabled())) ui->nestedValueComboBox->setEnabled(true);
+        if((ui->nestedValueComboBox->count() > 0) && (!ui->nestedValueDelete->isEnabled())) ui->nestedValueDelete->setEnabled(true);
+    }
+}
+
+
+void MainWindow::on_nestedComboBox_currentIndexChanged(int index)
+{
+    ui->nestedValueComboBox->clear();
+    ui->nestedValueComboBox->addItems(subtreeMap[ui->nestedComboBox->currentText()]);
+}
+
+
+void MainWindow::on_exportCSV_clicked()
+{
+    if(ui->fieldTable->rowCount() > 0) {
+        QString fileName = QFileDialog::getSaveFileName(this,
+                tr("Save Table"), "",
+                tr("table (*.csv);;All Files (*)"));
+        if (fileName.isEmpty()) {
+            return;
+        }
+         else {
+             QFile file(fileName);
+             if (!file.open(QIODevice::WriteOnly)) {
+                 QMessageBox::information(this, tr("Unable to open file"),
+                     file.errorString());
+                 return;
+             }
+
+             QTextStream out(&file);
+
+             for (auto i = 0; i < ui->fieldTable->rowCount(); i++) {
+                QString str = "";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::ITEM)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::TYPE)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::ENDIANNESS)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::BASE)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::TEXT_APPEND)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::LENGTH)->data(Qt::DisplayRole).toString()+=",";
+                str += ui->fieldTable->item(i, COLUMN_NAMES::INDEX)->data(Qt::DisplayRole).toString();
+                str += "\r\n";
+                out << str;
+             }
+
+        }
+    }
+}
+
+
+void MainWindow::on_importCSV_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                            tr("Open Table"), "",
+                                            tr("table (*.csv);;All Files (*)"));
+    QFile inputFile(filename);
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+       QTextStream in(&inputFile);
+       ui->fieldTable->clear();
+       while (!in.atEnd())
+       {
+          QString line = in.readLine();
+          QStringList splitList = line.split(",");
+
+          int row = ui->fieldTable->rowCount();
+          ui->fieldTable->insertRow(row);
+          ui->fieldTable->setItem(row, COLUMN_NAMES::ITEM, new QTableWidgetItem(splitList[COLUMN_NAMES::ITEM]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::TYPE, new QTableWidgetItem(splitList[COLUMN_NAMES::TYPE]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::ENDIANNESS, new QTableWidgetItem(splitList[COLUMN_NAMES::ENDIANNESS]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::BASE, new QTableWidgetItem(splitList[COLUMN_NAMES::BASE]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::TEXT_APPEND, new QTableWidgetItem(splitList[COLUMN_NAMES::TEXT_APPEND]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::LENGTH, new QTableWidgetItem(splitList[COLUMN_NAMES::LENGTH]));
+          ui->fieldTable->setItem(row, COLUMN_NAMES::INDEX, new QTableWidgetItem(splitList[COLUMN_NAMES::INDEX]));
+       }
+       inputFile.close();
+    }
+
+
 }
 

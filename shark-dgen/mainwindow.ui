@@ -52,6 +52,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>add to table</string>
+      </property>
       <property name="text">
        <string>ADD</string>
       </property>
@@ -64,6 +67,9 @@
         <width>101</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>default big endian</string>
       </property>
       <property name="text">
        <string>Little Endian</string>
@@ -78,6 +84,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>field name</string>
+      </property>
      </widget>
      <widget class="QComboBox" name="typeBox">
       <property name="geometry">
@@ -87,6 +96,9 @@
         <width>131</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>variable type</string>
       </property>
       <item>
        <property name="text">
@@ -158,6 +170,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>base encoding</string>
+      </property>
       <item>
        <property name="text">
         <string>DEC</string>
@@ -196,6 +211,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>delete from enum</string>
+      </property>
       <property name="text">
        <string>DELETE</string>
       </property>
@@ -212,6 +230,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>enum list</string>
+      </property>
      </widget>
      <widget class="QPushButton" name="enumAddButton">
       <property name="enabled">
@@ -224,6 +245,9 @@
         <width>61</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>add to enum</string>
       </property>
       <property name="text">
        <string>ADD</string>
@@ -284,6 +308,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>corresponding value</string>
+      </property>
       <property name="placeholderText">
        <string>value</string>
       </property>
@@ -300,8 +327,131 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>display string</string>
+      </property>
       <property name="placeholderText">
        <string>key</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="nestedTab">
+     <attribute name="title">
+      <string>Nested</string>
+     </attribute>
+     <widget class="QTextEdit" name="subtreeEdit">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>nested tree name</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="nestedComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>nested tree</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="subtreeAdd">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>10</y>
+        <width>41</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>add nested tree</string>
+      </property>
+      <property name="text">
+       <string>ADD</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="subtreeDelete">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>10</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>delete nested tree</string>
+      </property>
+      <property name="text">
+       <string>DELETE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="nestedInsertButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>10</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>insert row into nested tree</string>
+      </property>
+      <property name="text">
+       <string>INSERT</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="nestedValueComboBox">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>nested tree rows</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="nestedValueDelete">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>10</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>delete row from nested</string>
+      </property>
+      <property name="text">
+       <string>DELETE</string>
       </property>
      </widget>
     </widget>
@@ -403,13 +553,16 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>delete table row</string>
+      </property>
       <property name="text">
        <string>DELETE ROW</string>
       </property>
      </widget>
      <widget class="QPushButton" name="exportCSV">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -419,13 +572,16 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>import table from csv</string>
+      </property>
       <property name="text">
        <string>EXPORT CSV</string>
       </property>
      </widget>
      <widget class="QPushButton" name="importCSV">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -434,6 +590,9 @@
         <width>81</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>export table to csv</string>
       </property>
       <property name="text">
        <string>IMPORT CSV</string>
@@ -475,7 +634,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="infoTab">
      <attribute name="title">
@@ -508,6 +667,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>dissector name</string>
+      </property>
       <property name="placeholderText">
        <string>mydissector</string>
       </property>
@@ -526,6 +688,9 @@
         <width>41</width>
         <height>31</height>
        </size>
+      </property>
+      <property name="toolTip">
+       <string>2-3 letter acronym</string>
       </property>
       <property name="placeholderText">
        <string>ABC</string>
@@ -566,6 +731,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>delete from ethernet ports list</string>
+      </property>
       <property name="text">
        <string>DELETE</string>
       </property>
@@ -597,6 +765,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>valid 1-65535</string>
+      </property>
       <property name="placeholderText">
        <string>10000</string>
       </property>
@@ -609,6 +780,9 @@
         <width>81</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>add to ethernet ports list</string>
       </property>
       <property name="text">
        <string>ADD</string>
@@ -625,6 +799,9 @@
         <width>81</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>ethernet ports list</string>
       </property>
      </widget>
     </widget>
@@ -644,6 +821,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>save as .lua</string>
+      </property>
       <property name="text">
        <string>SAVE AS...</string>
       </property>
@@ -656,6 +836,9 @@
         <width>91</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>generate code</string>
       </property>
       <property name="text">
        <string>GENERATE</string>
