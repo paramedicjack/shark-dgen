@@ -411,7 +411,8 @@ void MainWindow::on_importCSV_clicked()
     if (inputFile.open(QIODevice::ReadOnly))
     {
        QTextStream in(&inputFile);
-       ui->fieldTable->clear();
+       ui->fieldTable->reset();
+       ui->fieldTable->setRowCount(0);
        while (!in.atEnd())
        {
           QString line = in.readLine();
